@@ -76,8 +76,6 @@ public class ActivityMain extends MyActionBarActivity {
     private Date lastStorageUpdate = null;
     private String queryText = "";
 
-
-    private int randomint = 3;
     private int tooYoungTooSimple = 0;
 
     @Override

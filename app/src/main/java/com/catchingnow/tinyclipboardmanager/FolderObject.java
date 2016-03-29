@@ -14,6 +14,8 @@ public class FolderObject {
     private String name;
     private Date creationDate;
 
+    private int FIRST_POSITION = 0;
+
     public FolderObject(String fName, Date cDate) {
         name = fName;
         creationDate = cDate;
@@ -43,6 +45,11 @@ public class FolderObject {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
+
+    public void addFolderObject(FolderObject folder) { FolderContents.add(FIRST_POSITION, folder); }
+
+    public void addClipObject(ClipObject clip) { FolderContents.add(FIRST_POSITION, clip); }
+
 
 }
 

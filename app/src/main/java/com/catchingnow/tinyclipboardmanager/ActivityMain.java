@@ -516,6 +516,7 @@ public class ActivityMain extends MyActionBarActivity {
         }, TRANSLATION_SLOW / 3 * 2);
     }
 
+
     private void mFabRotation(boolean clockwise, long time) {
         if (isRotating) return;
         mFAB.setRotation(0);
@@ -532,6 +533,8 @@ public class ActivityMain extends MyActionBarActivity {
         }, time - 400);
     }
 
+
+    //ADD BUTTON CALLED FROM activity_main.xml
     public void mFabOnClick(View view) {
         mFabRotation(true, TRANSLATION_FAST);
         final Intent intent = new Intent(this, ActivityEditor.class)

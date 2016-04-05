@@ -53,6 +53,9 @@ public class ActivityMain extends MyActionBarActivity {
     private LinearLayoutManager linearLayoutManager;
     protected Toolbar mToolbar;
     private ImageButton mFAB;
+
+    //private ImageButton testFAB; //TODO Added by us
+
     private SearchView searchView;
     private MenuItem searchItem;
     private Menu menu;
@@ -86,6 +89,9 @@ public class ActivityMain extends MyActionBarActivity {
         queryText = "";
 
         mFAB = (ImageButton) findViewById(R.id.main_fab);
+
+        //testFAB = (ImageButton) findViewById(R.id.TEST); //TODO Added by us
+
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         if (getString(R.string.screen_type).contains("phone")) {

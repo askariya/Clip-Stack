@@ -51,7 +51,20 @@
             android:layout_height="match_parent">
 
         </LinearLayout>
-
+        <ImageButton
+            android:id="@+id/TEST"
+            android:contentDescription="@string/action_add"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="80dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:padding="12dp"
+            android:src="@drawable/ic_action_delete"
+            android:scaleType="centerInside"
+            android:onClick="mFabOnClick" />
         <ImageButton
             android:id="@+id/main_fab"
             android:transitionName="@string/action_star"

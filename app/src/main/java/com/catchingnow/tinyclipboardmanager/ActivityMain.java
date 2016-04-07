@@ -54,7 +54,7 @@ public class ActivityMain extends MyActionBarActivity {
     protected Toolbar mToolbar;
     private ImageButton mFAB;
 
-    //private ImageButton testFAB; //TODO Added by us
+    private ImageButton folderFAB; //TODO Added by us
 
     private SearchView searchView;
     private MenuItem searchItem;
@@ -89,8 +89,7 @@ public class ActivityMain extends MyActionBarActivity {
         queryText = "";
 
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-
-        //testFAB = (ImageButton) findViewById(R.id.TEST); //TODO Added by us
+        folderFAB = (ImageButton) findViewById(R.id.TEST); //TODO Added by us
 
         mRecLayout = (LinearLayout) findViewById(R.id.recycler_layout);
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -539,7 +538,6 @@ public class ActivityMain extends MyActionBarActivity {
         }, time - 400);
     }
 
-    //TODO fix this
     //ADD BUTTON CALLED FROM activity_main.xml
     public void mFabOnClick(View view) {
         mFabRotation(true, TRANSLATION_FAST);
@@ -554,7 +552,13 @@ public class ActivityMain extends MyActionBarActivity {
             startActivity(intent);
         }
     }
-
+    /***************************************************FOLDER STUFF********************************************************/
+    //TODO Added by us
+    public void folderFABOnClick(View view){
+        final Intent intent = new Intent(this, ActivityFolder.class); //create a new Folder Intent
+        startActivity(intent); //redirect to the Folder Activity class
+    }
+    /**********************************************************************************************************************/
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);

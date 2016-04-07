@@ -29,7 +29,6 @@ public class ActivityEditor extends MyActionBarActivity {
     private InputMethodManager inputMethodManager;
     private Storage db;
 
-   // private ImageButton testFAB;// TODO Added by us
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,6 @@ public class ActivityEditor extends MyActionBarActivity {
 
         editText = (EditText) findViewById(R.id.edit_text);
         mFAB = (ImageButton) findViewById(R.id.main_fab);
-       // testFAB = (ImageButton) findViewById(R.id.TEST); // TODO Added by us
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         editText.setText(oldText);
         editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {

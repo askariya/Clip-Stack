@@ -539,7 +539,7 @@ public class ActivityMain extends MyActionBarActivity {
         }, time - 400);
     }
 
-
+    //TODO fix this
     //ADD BUTTON CALLED FROM activity_main.xml
     public void mFabOnClick(View view) {
         mFabRotation(true, TRANSLATION_FAST);

@@ -61,10 +61,11 @@
             android:layout_marginRight="80dp"
             android:layout_marginBottom="18dp"
             android:background="@drawable/background_fab"
-            android:padding="12dp"
-            android:src="@drawable/ic_action_delete"
+            android:padding="16dp"
+            android:src="@drawable/add_folder"
             android:scaleType="centerInside"
             android:onClick="mFabOnClick" />
+
         <ImageButton
             android:id="@+id/main_fab"
             android:transitionName="@string/action_star"

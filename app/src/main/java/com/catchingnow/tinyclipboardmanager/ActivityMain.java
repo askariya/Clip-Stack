@@ -594,6 +594,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
     }
 
+    //TODO Pretty sure this is where the clip Objects are displayed --> no idea how though
     private void initView() {
         //init View
 
@@ -722,6 +723,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
     }
 
+    //TODO maybe need to modify this too
     protected void setView() {
 
         if (db.getLatsUpdateDate() == lastStorageUpdate) return;

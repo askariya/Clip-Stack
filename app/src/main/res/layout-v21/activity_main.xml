@@ -53,7 +53,7 @@
         </LinearLayout>
         <ImageButton
             android:id="@+id/TEST"
-            android:contentDescription="@string/action_add"
+            android:contentDescription="@string/action_add_folder"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
             android:padding="16dp"
             android:src="@drawable/add_folder"
             android:scaleType="centerInside"
-            android:onClick="mFabOnClick" />
+            android:onClick="folderFABOnClick" />
 
         <ImageButton
             android:id="@+id/main_fab"

@@ -94,6 +94,14 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <!--Folder Button Activity-->
+        <activity
+            android:name=".ActivityFolder"
+            android:label="add folder">
+
+        </activity>
+
         <activity
             android:name=".ActivityBackup"
             android:label="@string/title_activity_backup"

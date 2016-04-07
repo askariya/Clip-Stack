@@ -49,6 +49,7 @@
     <string name="first_launch_clipboards_3">%1$s Swipe to delete. %2$s</string>
     <string name="title_activity_activity_get_share_text">Copy to clipboard</string>
     <string name="action_add">Add</string>
+    <string name="action_add_folder">Add_Folder</string>
     <string name="action_delete_all">Clear all</string>
     <string name="dialog_delete_all">Are you sure you want to clear all?\nStarred items will be retained.</string>
     <string name="dialog_ok">OK</string>

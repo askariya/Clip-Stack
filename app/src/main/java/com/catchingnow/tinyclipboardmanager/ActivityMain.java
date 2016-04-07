@@ -556,7 +556,8 @@ public class ActivityMain extends MyActionBarActivity {
     //TODO Added by us
     public void folderFABOnClick(View view){
         final Intent intent = new Intent(this, ActivityFolder.class); //create a new Folder Intent
-        startActivity(intent); //redirect to the Folder Activity class
+        startActivity(intent); //Call the Folder Activity class
+
     }
     /**********************************************************************************************************************/
     private void clearDeleteQueue() {

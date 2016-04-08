@@ -25,10 +25,15 @@ public class Storage {
     public final static String UPDATE_DB_ADD = "updateDbAdd";
     public final static String UPDATE_DB_DELETE = "updateDbDelete";
     private static final String TABLE_NAME = "clipHistory";
-    private static final String TABLE_NAME_FOLDER = "folderHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
     private static final String CLIP_IS_STAR = "star";
+
+    //TODO some of these are unnecessary but might as well make logical methods
+    private static final String TABLE_NAME_FOLDER = "folderHistory";
+    private static final String FOLDER_STRING = "history";
+    private static final String FOLDER_DATE = "date";
+
     private static Storage mInstance = null;
     private StorageHelper dbHelper;
     private SQLiteDatabase db;
@@ -374,10 +379,10 @@ public class Storage {
         //deleteClipHistory(newfolder.getName());
         //long timeStamp = newfolder.getDate().getTime();
         ContentValues values = new ContentValues();
-        values.put(CLIP_DATE, newfolder.getCreationDate().getTime());
-        values.put(CLIP_STRING, newfolder.getName());
+        values.put(FOLDER_DATE, newfolder.getCreationDate().getTime());
+        values.put(FOLDER_STRING, newfolder.getName());
         //values.put(CLIP_IS_STAR, clipObject.isStarred());
-        long row_id = db.insert(TABLE_NAME, null, values);
+        long row_id = db.insert(TABLE_NAME_FOLDER, null, values); //insert the folder into the table
         if (row_id == -1) {
             //Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;

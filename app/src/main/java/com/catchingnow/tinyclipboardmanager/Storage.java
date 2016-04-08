@@ -375,15 +375,19 @@ public class Storage {
 
     }
 
+    //TODO Add fields for stored clip objects
     public boolean addFolderHistory(FolderObject newfolder){
         //deleteClipHistory(newfolder.getName());
         //long timeStamp = newfolder.getDate().getTime();
+
         ContentValues values = new ContentValues();
         values.put(FOLDER_DATE, newfolder.getCreationDate().getTime());
         values.put(FOLDER_STRING, newfolder.getName());
         //values.put(CLIP_IS_STAR, clipObject.isStarred());
+
         long row_id = db.insert(TABLE_NAME_FOLDER, null, values); //insert the folder into the table
-        if (row_id == -1) {
+
+        if (row_id == -1){
             //Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
             return false;
         }
@@ -464,6 +468,7 @@ public class Storage {
     public class StorageHelper extends SQLiteOpenHelper {
         public static final String DATABASE_NAME = "clippingnow.db";
         private static final int DATABASE_VERSION = 3;
+
         private static final String TABLE_NAME = "cliphistory";
         private static final String TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
@@ -473,13 +478,12 @@ public class Storage {
                         ");";
 
         //create a second table in the database for folder storage
-        //TODO modify this later
+        //TODO add stuff for ArrayList containing folderObjects/clipObjects
         private static final String TABLE_NAME_FOLDER = "folderhistory";
         private static final String TABLE_CREATE_FOLDER =
                 "CREATE TABLE " + TABLE_NAME_FOLDER + " (" +
-                        CLIP_DATE + " TIMESTAMP, " +
-                        CLIP_STRING + " TEXT, " +
-                        CLIP_IS_STAR + " BOOLEAN" +
+                        FOLDER_DATE + " TIMESTAMP, " +
+                        FOLDER_STRING + " TEXT, " +
                         ");";
 
         public StorageHelper(Context context) {

@@ -25,6 +25,7 @@ public class Storage {
     public final static String UPDATE_DB_ADD = "updateDbAdd";
     public final static String UPDATE_DB_DELETE = "updateDbDelete";
     private static final String TABLE_NAME = "clipHistory";
+    private static final String TABLE_NAME_FOLDER = "folderHistory";
     private static final String CLIP_STRING = "history";
     private static final String CLIP_DATE = "date";
     private static final String CLIP_IS_STAR = "star";
@@ -466,13 +467,24 @@ public class Storage {
                         CLIP_IS_STAR + " BOOLEAN" +
                         ");";
 
+        //create a second table in the database for folder storage
+        //TODO modify this later
+        private static final String TABLE_NAME_FOLDER = "folderhistory";
+        private static final String TABLE_CREATE_FOLDER =
+                "CREATE TABLE " + TABLE_NAME_FOLDER + " (" +
+                        CLIP_DATE + " TIMESTAMP, " +
+                        CLIP_STRING + " TEXT, " +
+                        CLIP_IS_STAR + " BOOLEAN" +
+                        ");";
+
         public StorageHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(TABLE_CREATE);
+            db.execSQL(TABLE_CREATE); //create a table for clip history
+            db.execSQL(TABLE_CREATE_FOLDER); //create a table for folder history
         }
 
         @Override

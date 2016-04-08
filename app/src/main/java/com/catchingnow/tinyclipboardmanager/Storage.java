@@ -373,7 +373,7 @@ public class Storage {
         //deleteClipHistory(newfolder.getName());
         //long timeStamp = newfolder.getDate().getTime();
         ContentValues values = new ContentValues();
-        //values.put(CLIP_DATE, newFolder.);
+        values.put(CLIP_DATE, newfolder.getCreationDate().getTime());
         values.put(CLIP_STRING, newfolder.getName());
         //values.put(CLIP_IS_STAR, clipObject.isStarred());
         long row_id = db.insert(TABLE_NAME, null, values);

@@ -577,6 +577,7 @@ public class ActivityMain extends MyActionBarActivity {
                     return;
                 /**Create new FolderObject with 'name' and add to database
                  * Will want to add a new folder button to the main screen as well i think*******/
+                db.addFolder(name);
                 popUp.dismiss();
             }
         });
@@ -932,6 +933,7 @@ public class ActivityMain extends MyActionBarActivity {
 
         }
 
+
         @Override
         public ClipCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
@@ -997,6 +999,7 @@ public class ActivityMain extends MyActionBarActivity {
                 }
             }, (position + 2) * 60);
         }
+
 
         public class ClipCardViewHolder extends RecyclerView.ViewHolder {
             protected TextView vTime;

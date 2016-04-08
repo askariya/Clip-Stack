@@ -349,6 +349,42 @@ public class Storage {
 
     }
 
+    /***************ADDED BY US****************************/
+    public void addFolder(String name) {
+        //Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newClip + ", " + isImportant + ")");
+
+        open();
+        if (!name.isEmpty()) {
+            addFolderHistory(new FolderObject(
+                    name,
+                    new Date()
+            ));
+        }
+        close();
+        latsUpdate = new Date();
+        //isClipsInMemoryChanged = true;
+
+        //Put whatever refreshAll is doing right here
+        refreshAllTypeOfList(!name.isEmpty(), "");
+
+    }
+
+    public boolean addFolderHistory(FolderObject newfolder){
+        //deleteClipHistory(newfolder.getName());
+        //long timeStamp = newfolder.getDate().getTime();
+        ContentValues values = new ContentValues();
+        //values.put(CLIP_DATE, newFolder.);
+        values.put(CLIP_STRING, newfolder.getName());
+        //values.put(CLIP_IS_STAR, clipObject.isStarred());
+        long row_id = db.insert(TABLE_NAME, null, values);
+        if (row_id == -1) {
+            //Log.e("Storage", "write db error: addClipHistory " + clipObject.getText());
+            return false;
+        }
+        return true;
+    }
+    /***********************************************************/
+
     public boolean updateSystemClipboard() {
 
         //sync system clipboard and storage.

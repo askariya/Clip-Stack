@@ -362,7 +362,7 @@ public class Storage {
         }
         close();
         latsUpdate = new Date();
-        //isClipsInMemoryChanged = true;
+        isClipsInMemoryChanged = true;
 
         //Put whatever refreshAll is doing right here
         refreshAllTypeOfList(!name.isEmpty(), "");

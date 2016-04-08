@@ -69,6 +69,7 @@ public class ActivityMain extends MyActionBarActivity {
     protected Context context;
     private Storage db;
     private List<ClipObject> clips;
+    private List<FolderObject> folders; //Contains
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
     private BroadcastReceiver mMessageReceiver;
 
@@ -577,6 +578,8 @@ public class ActivityMain extends MyActionBarActivity {
                     return;
                 /**Create new FolderObject with 'name' and add to database
                  * Will want to add a new folder button to the main screen as well i think*******/
+                Date folder_creation_date = new Date();
+                FolderObject added_folder = new FolderObject(name, folder_creation_date);
                 popUp.dismiss();
             }
         });

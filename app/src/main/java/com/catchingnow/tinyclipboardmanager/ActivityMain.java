@@ -2,6 +2,7 @@ package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,8 +31,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -555,10 +559,36 @@ public class ActivityMain extends MyActionBarActivity {
     /***************************************************FOLDER STUFF********************************************************/
     //TODO Added by us
     public void folderFABOnClick(View view){
-        final Intent intent = new Intent(this, ActivityFolder.class); //create a new Folder Intent
+        /*final Intent intent = new Intent(this, ActivityFolder.class); //create a new Folder Intent
         startActivity(intent); //Call the Folder Activity class
+        */
 
+        /*****************Added By Brandon -- Not sure if this is the way we want to do it***********************/
+        final Dialog popUp = new Dialog(this);
+        popUp.setContentView(R.layout.create_folder_popup);
+        final EditText input = (EditText) popUp.findViewById(R.id.editText);
+        final Button save = (Button) popUp.findViewById(R.id.save);
+        final Button cancel = (Button) popUp.findViewById(R.id.cancel);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = input.getText().toString();
+                if(name.isEmpty())
+                    return;
+                /**Create new FolderObject with 'name' and add to database
+                 * Will want to add a new folder button to the main screen as well i think*******/
+                popUp.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUp.dismiss();
+            }
+        });
+        popUp.show();
     }
+
     /**********************************************************************************************************************/
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {

@@ -33,6 +33,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -802,6 +803,7 @@ public class ActivityMain extends MyActionBarActivity {
 
     private void firstLaunch() throws InterruptedException {
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
+        int fuckYouAru = 0;
         db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"));
@@ -920,6 +922,10 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
+
+            //Added to make folders invisible
+            clipCardViewHolder.fFrameLayout.setVisibility(View.GONE);
+
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
@@ -1038,6 +1044,12 @@ public class ActivityMain extends MyActionBarActivity {
             protected LinearLayout vBackground;
             protected View vMain;
 
+            //Folder xml ids
+            protected TextView fTime;
+            protected TextView fDate;
+            protected TextView fText;
+            protected FrameLayout fFrameLayout;
+
             public ClipCardViewHolder(View v) {
                 super(v);
                 vTime = (TextView) v.findViewById(R.id.activity_main_card_time);
@@ -1047,6 +1059,11 @@ public class ActivityMain extends MyActionBarActivity {
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
+
+                fTime = (TextView) v.findViewById(R.id.activity_main_folder_time);
+                fDate = (TextView) v.findViewById(R.id.activity_main_folder_date);
+                fText = (TextView) v.findViewById(R.id.activity_main_folder_name);
+                fFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_folder_frame);
             }
         }
 
@@ -1081,9 +1098,11 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final FolderCardViewHolder clipCardViewHolder, int i) {
             final FolderObject folderObject = folderObjectList.get(i);
-            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
-            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(folderObject.getName()));
+            clipCardViewHolder.fDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
+            clipCardViewHolder.fTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
+            clipCardViewHolder.fText.setText(MyUtil.stringLengthCut(folderObject.getName()));
+
+            clipCardViewHolder.vFrameLayout.setVisibility(View.GONE);
 
             setAnimation(clipCardViewHolder.vMain, i);
         }
@@ -1093,7 +1112,7 @@ public class ActivityMain extends MyActionBarActivity {
         public FolderCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
-                    inflate(R.layout.activity_main_foldercard, viewGroup, false);
+                    inflate(R.layout.activity_main_card, viewGroup, false);
 
             return new FolderCardViewHolder(itemView);
         }
@@ -1161,19 +1180,29 @@ public class ActivityMain extends MyActionBarActivity {
 
         //TODO will likely need our own version of this that corresponds to a new XML card
         public class FolderCardViewHolder extends RecyclerView.ViewHolder {
-            protected TextView vTime;
-            protected TextView vDate;
-            protected TextView vText;
+
             protected LinearLayout vBackground;
             protected View vMain;
+            protected FrameLayout vFrameLayout;
+
+            //Folder xml ids
+            protected TextView fTime;
+            protected TextView fDate;
+            protected TextView fText;
+            protected FrameLayout fFrameLayout;
 
             public FolderCardViewHolder(View v) {
                 super(v);
-                vTime = (TextView) v.findViewById(R.id.activity_main_foldercard_time);
-                vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
-                vText = (TextView) v.findViewById(R.id.activity_main_foldercard_text);;
+
+                vFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_clip_frame);
+
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
+
+                fTime = (TextView) v.findViewById(R.id.activity_main_folder_time);
+                fDate = (TextView) v.findViewById(R.id.activity_main_folder_date);
+                fText = (TextView) v.findViewById(R.id.activity_main_folder_name);
+                fFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_folder_frame);
             }
         }
 

@@ -393,7 +393,7 @@ public class Storage {
         //deleteClipHistory(newfolder.getName());
         //long timeStamp = newfolder.getDate().getTime();
 
-        Gson folderContentsArrayList = new Gson();
+        Gson folderContentsArrayList = new Gson(); //create a new GSON object to hold the ArrayList of ClipObjs/FolderObjs
         String folderContArrListString = folderContentsArrayList.toJson(newfolder.getFolderContents());;
 
         ContentValues values = new ContentValues();
@@ -415,7 +415,7 @@ public class Storage {
             open();
             //Maybe we don't want to sort by date?
             String sortOrder = FOLDER_DATE + " DESC";
-            String[] COLUMNS = {FOLDER_STRING, FOLDER_DATE};
+            String[] COLUMNS = {FOLDER_STRING, FOLDER_DATE, FOLDER_CONTENTS};
             Cursor c;
             c = db.query(TABLE_NAME_FOLDER, COLUMNS, null, null, null, null, sortOrder);
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
@@ -533,7 +533,8 @@ public class Storage {
         private static final String TABLE_CREATE_FOLDER =
                 "CREATE TABLE " + TABLE_NAME_FOLDER + " (" +
                         FOLDER_DATE + " TIMESTAMP, " +
-                        FOLDER_STRING + " TEXT " +
+                        FOLDER_STRING + " TEXT, " +
+                        FOLDER_CONTENTS + " TEXT " +
                         ");";
 
         public StorageHelper(Context context) {

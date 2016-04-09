@@ -119,6 +119,9 @@ public class ActivityMain extends MyActionBarActivity {
 
         attachKeyboardListeners();
 
+
+        //TODO This receives a broadcast from DB -- differentiate broadcast message: UPDATE_DB_ADD_CLIP vs UPDATE_DB_ADD_FOLDER
+        //setView() looks like it handles adding new clips to the screen
         mMessageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -754,7 +757,7 @@ public class ActivityMain extends MyActionBarActivity {
         }
     }
 
-    //TODO maybe need to modify this too
+    //TODO This gets the updated clips list from db and displays it on screen somehow using clipCardAdapter
     protected void setView() {
 
         if (db.getLatsUpdateDate() == lastStorageUpdate) return;
@@ -886,6 +889,8 @@ public class ActivityMain extends MyActionBarActivity {
             return clipObjectList.size();
         }
 
+
+        //TODO I FOUND IT -- THIS IS WHERE CLIP VIEWS ON THE SCREEN ARE BEING CREATED
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
@@ -970,6 +975,7 @@ public class ActivityMain extends MyActionBarActivity {
             setItemsVisibility();
         }
 
+        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen; probably dont need to change this but we will have to use it
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {

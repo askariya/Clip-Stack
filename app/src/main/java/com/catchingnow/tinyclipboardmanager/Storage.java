@@ -442,12 +442,18 @@ public class Storage {
 //            ActivityMain.refreshMainView(context, "");
 //        }
         CBWatcherService.startCBService(context, true, false);
+
+        /**This is whats important to us -- Sends a broadcast that the DB has changed, mMessageReceiver is a field in ActivityMain that hears the broadcast and does stuff for making the new clips visible***/
         updateDbBroadcast(context, added, deletedString);
+        /****************************************************************************************************************************************************************************************************/
+
+        //This is totally useless
         context.startService(new Intent(context, ClipObjectActionBridge.class)
-                .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
+         .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
         );
     }
 
+    //TODO Will probably need to add a new variable UPDATE_DB_ADD_FOLDER to differentiate from adding clips
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
         Intent intent = new Intent(UPDATE_DB);
         if (added) {

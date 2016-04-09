@@ -14,11 +14,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +45,8 @@ public class Storage {
     private List<FolderObject> foldersInMemory;
     public final static String UPDATE_DB_ADD_FOLDER = "updateDbAddFolder";
     private static boolean wasFolderAdded = false;
+
+    private Gson folderGSON;
 
     private static Storage mInstance = null;
     private StorageHelper dbHelper;
@@ -393,8 +397,8 @@ public class Storage {
         //deleteClipHistory(newfolder.getName());
         //long timeStamp = newfolder.getDate().getTime();
 
-        Gson folderContentsArrayList = new Gson(); //create a new GSON object to hold the ArrayList of ClipObjs/FolderObjs
-        String folderContArrListString = folderContentsArrayList.toJson(newfolder.getFolderContents());;
+        folderGSON = new Gson(); //create a new GSON object to hold the ArrayList of ClipObjs/FolderObjs
+        String folderContArrListString = folderGSON.toJson(newfolder.getFolderContents());;
 
         ContentValues values = new ContentValues();
         values.put(FOLDER_DATE, newfolder.getCreationDate().getTime());
@@ -421,10 +425,16 @@ public class Storage {
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             foldersInMemory = new ArrayList<>();
             while (c.moveToNext()) {
+
+                //Read from Gson String to ArrayList
+                Type type = new TypeToken<ArrayList<Object>>() {}.getType();
+                ArrayList<Object>  outputArrayList = folderGSON.fromJson(c.getString(2), type);
+
                 foldersInMemory.add(
                         new FolderObject(
                                 c.getString(0),
-                                new Date(c.getLong(1))
+                                new Date(c.getLong(1)),
+                                outputArrayList
                         )
                 );
             }

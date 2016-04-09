@@ -59,6 +59,8 @@ public class ActivityMain extends MyActionBarActivity {
     private ImageButton mFAB;
 
     private ImageButton folderFAB; //TODO Added by us
+    private List<FolderObject> folders;
+    private FolderCardAdapter folderCardAdapter;
 
     private SearchView searchView;
     private MenuItem searchItem;
@@ -127,7 +129,11 @@ public class ActivityMain extends MyActionBarActivity {
             public void onReceive(Context context, Intent intent) {
                 if (intent.getBooleanExtra(Storage.UPDATE_DB_ADD, false)) {
                     setView();
-                } else {
+                }
+                else if(intent.getBooleanExtra(Storage.UPDATE_DB_ADD_FOLDER, false)){
+                    setViewFolder();
+                }
+                else {
                     clipCardAdapter.remove(intent.getStringExtra(Storage.UPDATE_DB_DELETE));
                 }
 
@@ -777,6 +783,23 @@ public class ActivityMain extends MyActionBarActivity {
         setItemsVisibility();
     }
 
+    /*****************ADDED BY BRANDON*****************/
+    protected void setViewFolder() {
+
+        if (db.getLatsUpdateDate() == lastStorageUpdate) return;
+        lastStorageUpdate = db.getLatsUpdateDate();
+
+       //get folders
+        folders = db.getFolderHistory();
+
+        //set view
+        folderCardAdapter = new FolderCardAdapter(folders, this);
+        mRecList.setAdapter(folderCardAdapter);
+
+        setItemsVisibility();
+    }
+    /****************************************************/
+
     private void firstLaunch() throws InterruptedException {
         //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
         db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
@@ -975,7 +998,6 @@ public class ActivityMain extends MyActionBarActivity {
             setItemsVisibility();
         }
 
-        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen; probably dont need to change this but we will have to use it
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {
@@ -1029,4 +1051,132 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
     }
+
+    /***********ADDED BY BRANDON******************************/
+    public class FolderCardAdapter extends RecyclerView.Adapter<FolderCardAdapter.FolderCardViewHolder> {
+        private Context context;
+        private List<FolderObject> folderObjectList;
+        private boolean allowAnimate = true;
+
+        public FolderCardAdapter(List<FolderObject> folderObjectList, Context context) {
+            this.context = context;
+            this.folderObjectList = folderObjectList;
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    allowAnimate = false;
+                }
+            }, 100);
+        }
+
+        @Override
+        public int getItemCount() {
+            return folderObjectList.size();
+        }
+
+
+        //TODO I FOUND IT -- THIS IS WHERE CLIP VIEWS ON THE SCREEN ARE BEING CREATED
+        @Override
+        public void onBindViewHolder(final FolderCardViewHolder clipCardViewHolder, int i) {
+            final FolderObject folderObject = folderObjectList.get(i);
+            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
+            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(folderObject.getName()));
+
+            setAnimation(clipCardViewHolder.vMain, i);
+        }
+
+
+        @Override
+        public FolderCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.activity_main_foldercard, viewGroup, false);
+
+            return new FolderCardViewHolder(itemView);
+        }
+
+
+        public void add(int position, FolderObject folderObject) {
+            folderObjectList.add(position, folderObject);
+            notifyItemInserted(position);
+            setItemsVisibility();
+        }
+
+        public void remove(FolderObject folderObject) {
+            int position = folderObjectList.indexOf(folderObject);
+            if (position == -1) return;
+            remove(position);
+        }
+
+        public void remove(String clipString) {
+            for (FolderObject folderObject : folderObjectList) {
+                if (folderObject.getName().equals(clipString)) {
+                    remove(folderObject);
+                    return;
+                }
+            }
+        }
+
+        public void remove(int position) {
+            folderObjectList.remove(position);
+            notifyItemRemoved(position);
+            setItemsVisibility();
+        }
+
+
+        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen; probably dont need to change this but we will have to use it
+        private void setAnimation(final View viewToAnimate, int position) {
+            //animate for list fade in
+            if (!allowAnimate) {
+                return;
+            }
+            viewToAnimate.setVisibility(View.INVISIBLE);
+            final Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            animation.setDuration(TRANSLATION_FAST);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    viewToAnimate.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    viewToAnimate.startAnimation(animation);
+                }
+            }, (position + 2) * 60);
+        }
+
+
+        //TODO will likely need our own version of this that corresponds to a new XML card
+        public class FolderCardViewHolder extends RecyclerView.ViewHolder {
+            protected TextView vTime;
+            protected TextView vDate;
+            protected TextView vText;
+            protected LinearLayout vBackground;
+            protected View vMain;
+
+            public FolderCardViewHolder(View v) {
+                super(v);
+                vTime = (TextView) v.findViewById(R.id.activity_main_foldercard_time);
+                vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
+                vText = (TextView) v.findViewById(R.id.activity_main_foldercard_text);;
+                vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
+                vMain = v;
+            }
+        }
+
+    }
+    /**************************************************************************************/
 }

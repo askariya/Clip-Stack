@@ -33,6 +33,9 @@ public class Storage {
     private static final String TABLE_NAME_FOLDER = "folderHistory";
     private static final String FOLDER_STRING = "history";
     private static final String FOLDER_DATE = "date";
+    private List<FolderObject> foldersInMemory;
+    public final static String UPDATE_DB_ADD_FOLDER = "updateDbAddFolder";
+    private static boolean wasFolderAdded = false;
 
     private static Storage mInstance = null;
     private StorageHelper dbHelper;
@@ -114,6 +117,7 @@ public class Storage {
         return queryClips;
     }
 
+    //TODO need our own version of this to return all folders
     public List<ClipObject> getClipHistory() {
         if (isClipsInMemoryChanged) {
             open();
@@ -368,11 +372,13 @@ public class Storage {
         }
         close();
         latsUpdate = new Date();
-        isClipsInMemoryChanged = true;
+        //isClipsInMemoryChanged = true;
+        wasFolderAdded = true;
 
-        //Put whatever refreshAll is doing right here
-        refreshAllTypeOfList(!name.isEmpty(), "");
-
+        //See we only care about broadcasting the DB change, no need to use refreshAll
+        //refreshAllTypeOfList(!name.isEmpty(), "");
+        CBWatcherService.startCBService(context, true, false);
+        updateDbBroadcast(context, true, null);
     }
 
     //TODO Add fields for stored clip objects
@@ -383,7 +389,6 @@ public class Storage {
         ContentValues values = new ContentValues();
         values.put(FOLDER_DATE, newfolder.getCreationDate().getTime());
         values.put(FOLDER_STRING, newfolder.getName());
-        //values.put(CLIP_IS_STAR, clipObject.isStarred());
 
         long row_id = db.insert(TABLE_NAME_FOLDER, null, values); //insert the folder into the table
 
@@ -392,6 +397,31 @@ public class Storage {
             return false;
         }
         return true;
+    }
+
+    public List<FolderObject> getFolderHistory() {
+        if (wasFolderAdded) {
+            open();
+            //Maybe we don't want to sort by date?
+            String sortOrder = FOLDER_DATE + " DESC";
+            String[] COLUMNS = {FOLDER_STRING, FOLDER_DATE};
+            Cursor c;
+            c = db.query(TABLE_NAME_FOLDER, COLUMNS, null, null, null, null, sortOrder);
+            //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
+            foldersInMemory = new ArrayList<>();
+            while (c.moveToNext()) {
+                foldersInMemory.add(
+                        new FolderObject(
+                                c.getString(0),
+                                new Date(c.getLong(1))
+                        )
+                );
+            }
+            c.close();
+            close();
+            wasFolderAdded = false;
+        }
+        return foldersInMemory;
     }
     /***********************************************************/
 
@@ -447,7 +477,7 @@ public class Storage {
         updateDbBroadcast(context, added, deletedString);
         /****************************************************************************************************************************************************************************************************/
 
-        //This is totally useless
+        //I think this is totally useless to us
         context.startService(new Intent(context, ClipObjectActionBridge.class)
          .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
         );
@@ -456,8 +486,11 @@ public class Storage {
     //TODO Will probably need to add a new variable UPDATE_DB_ADD_FOLDER to differentiate from adding clips
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
         Intent intent = new Intent(UPDATE_DB);
-        if (added) {
+        if (added && wasFolderAdded == false) {
             intent.putExtra(UPDATE_DB_ADD, true);
+        }
+        else if(added && wasFolderAdded == true){
+            intent.putExtra(UPDATE_DB_ADD_FOLDER, true);
         }
         if (deletedString != null) {
             if (!deletedString.isEmpty()) {
@@ -489,7 +522,7 @@ public class Storage {
         private static final String TABLE_CREATE_FOLDER =
                 "CREATE TABLE " + TABLE_NAME_FOLDER + " (" +
                         FOLDER_DATE + " TIMESTAMP, " +
-                        FOLDER_STRING + " TEXT, " +
+                        FOLDER_STRING + " TEXT " +
                         ");";
 
         public StorageHelper(Context context) {

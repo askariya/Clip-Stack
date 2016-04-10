@@ -29,8 +29,10 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         Toast.makeText(ActivityFolder.this,
                 "Folder button has been clicked!", Toast.LENGTH_SHORT).show();
 
-
         database = Storage.getInstance(this); //get the database
+
+        //TODO display the contents of the folder here
+
     }
 
 

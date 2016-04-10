@@ -802,8 +802,7 @@ public class ActivityMain extends MyActionBarActivity {
     /****************************************************/
 
     private void firstLaunch() throws InterruptedException {
-        //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
-        int fuckYouAru = 0;
+        //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"))
         db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"));

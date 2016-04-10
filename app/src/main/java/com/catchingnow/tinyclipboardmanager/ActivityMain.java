@@ -929,6 +929,7 @@ public class ActivityMain extends MyActionBarActivity {
             else if(added_folder_object_flag)
                 clipCardViewHolder.vFrameLayout.setVisibility(View.GONE);
 
+
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();

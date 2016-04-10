@@ -86,6 +86,7 @@ public class ActivityMain extends MyActionBarActivity {
     private String queryText = "";
 
     private int tooYoungTooSimple = 0;
+    private int DELETE_THIS_COUNTER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -923,7 +924,10 @@ public class ActivityMain extends MyActionBarActivity {
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
 
             //Added to make folders invisible
-            clipCardViewHolder.fFrameLayout.setVisibility(View.GONE);
+            if(added_clip_object_flag)
+                clipCardViewHolder.fFrameLayout.setVisibility(View.GONE);
+            else if(added_folder_object_flag)
+                clipCardViewHolder.vFrameLayout.setVisibility(View.GONE);
 
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
@@ -1042,6 +1046,7 @@ public class ActivityMain extends MyActionBarActivity {
             protected ImageButton vShare;
             protected LinearLayout vBackground;
             protected View vMain;
+            protected FrameLayout vFrameLayout;
 
             //Folder xml ids
             protected TextView fTime;
@@ -1058,6 +1063,7 @@ public class ActivityMain extends MyActionBarActivity {
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
+                vFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_clip_frame);
 
                 fTime = (TextView) v.findViewById(R.id.activity_main_folder_time);
                 fDate = (TextView) v.findViewById(R.id.activity_main_folder_date);

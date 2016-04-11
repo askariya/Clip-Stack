@@ -383,11 +383,8 @@ public class Storage {
         }
         close();
         latsUpdate = new Date();
-        //isClipsInMemoryChanged = true;
         wasFolderAdded = true;
 
-        //See we only care about broadcasting the DB change, no need to use refreshAll
-        //refreshAllTypeOfList(!name.isEmpty(), "");
         CBWatcherService.startCBService(context, true, false);
         updateDbBroadcast(context, true, null);
     }
@@ -504,7 +501,6 @@ public class Storage {
         );
     }
 
-    //TODO Will probably need to add a new variable UPDATE_DB_ADD_FOLDER to differentiate from adding clips
     public static void updateDbBroadcast(Context context, Boolean added, String deletedString) {
         Intent intent = new Intent(UPDATE_DB);
         if (added && wasFolderAdded == false) {

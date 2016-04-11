@@ -30,7 +30,8 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         addClipButton = (ImageButton) findViewById(R.id.main_fab);
         database = Storage.getInstance(this); //get the database
 
-        //TODO display the contents of the folder here
+        //TODO display the contents of the folder here -- probably just copy/paste setView(), and clipCardAdapter class from activity main and just change db.getClipHistory to getFolderClips or something
+        //TODO in order to display only the contents in the folder, add a getFolderClips() to storage
 
     }
 

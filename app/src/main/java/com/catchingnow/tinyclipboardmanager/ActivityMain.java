@@ -33,7 +33,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -86,7 +85,6 @@ public class ActivityMain extends MyActionBarActivity {
     private String queryText = "";
 
     private int tooYoungTooSimple = 0;
-    private int DELETE_THIS_COUNTER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -570,11 +568,7 @@ public class ActivityMain extends MyActionBarActivity {
     /***************************************************FOLDER STUFF********************************************************/
     //TODO Added by us
     public void folderFABOnClick(View view){
-        /*final Intent intent = new Intent(this, ActivityFolder.class); //create a new Folder Intent
-        startActivity(intent); //Call the Folder Activity class
-        */
-
-        /*****************Added By Brandon -- Not sure if this is the way we want to do it***********************/
+        /*****************Added By Brandon***********************/
         final Dialog popUp = new Dialog(this);
         popUp.setContentView(R.layout.create_folder_popup);
         final EditText input = (EditText) popUp.findViewById(R.id.editText);
@@ -586,8 +580,7 @@ public class ActivityMain extends MyActionBarActivity {
                 String name = input.getText().toString();
                 if(name.isEmpty())
                     return;
-                /**Create new FolderObject with 'name' and add to database
-                 * Will want to add a new folder button to the main screen as well i think*******/
+
                 db.addFolder(name);
                 popUp.dismiss();
             }
@@ -601,7 +594,7 @@ public class ActivityMain extends MyActionBarActivity {
         popUp.show();
     }
 
-    /**********************************************************************************************************************/
+    /*******************************************************************/
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
@@ -636,7 +629,6 @@ public class ActivityMain extends MyActionBarActivity {
         }
     }
 
-    //TODO Pretty sure this is where the clip Objects are displayed --> no idea how though
     private void initView() {
         //init View
 
@@ -793,6 +785,7 @@ public class ActivityMain extends MyActionBarActivity {
 
        //get folders
         folders = db.getFolderHistory();
+        //clips = db.getClipHistory(queryText);
 
         //set view
         folderCardAdapter = new FolderCardAdapter(folders, this);
@@ -803,7 +796,7 @@ public class ActivityMain extends MyActionBarActivity {
     /****************************************************/
 
     private void firstLaunch() throws InterruptedException {
-        //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"))
+        //db.modifyClip(null, getString(R.string.first_launch_clips_3, "👈", "😇"));
         db.modifyClip(null, getString(R.string.first_launch_clipboards_3, "", "👉"));
         Thread.sleep(50);
         db.modifyClip(null, getString(R.string.first_launch_clipboards_2, "🙋"));
@@ -915,21 +908,13 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
 
-        //TODO I FOUND IT -- THIS IS WHERE CLIP VIEWS ON THE SCREEN ARE BEING CREATED
+        //TODO THIS IS WHERE CLIP VIEWS ON THE SCREEN ARE BEING CREATED
         @Override
         public void onBindViewHolder(final ClipCardViewHolder clipCardViewHolder, int i) {
             final ClipObject clipObject = clipObjectList.get(i);
             clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, clipObject.getDate()));
             clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, clipObject.getDate()));
             clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(clipObject.getText()));
-
-            //Added to make folders invisible
-            if(added_clip_object_flag)
-                clipCardViewHolder.fFrameLayout.setVisibility(View.GONE);
-            else if(added_folder_object_flag)
-                clipCardViewHolder.vFrameLayout.setVisibility(View.GONE);
-
-
             if (clipObject.isStarred()) {
                 clipCardViewHolder.vStarred.setImageResource(R.drawable.ic_action_star_yellow);
                 clipCardViewHolder.vBackground.removeAllViews();
@@ -1008,6 +993,7 @@ public class ActivityMain extends MyActionBarActivity {
             setItemsVisibility();
         }
 
+        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {
@@ -1047,13 +1033,6 @@ public class ActivityMain extends MyActionBarActivity {
             protected ImageButton vShare;
             protected LinearLayout vBackground;
             protected View vMain;
-            protected FrameLayout vFrameLayout;
-
-            //Folder xml ids
-            protected TextView fTime;
-            protected TextView fDate;
-            protected TextView fText;
-            protected FrameLayout fFrameLayout;
 
             public ClipCardViewHolder(View v) {
                 super(v);
@@ -1064,12 +1043,6 @@ public class ActivityMain extends MyActionBarActivity {
                 vShare = (ImageButton) v.findViewById(R.id.activity_main_card_share_button);
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
-                vFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_clip_frame);
-
-                fTime = (TextView) v.findViewById(R.id.activity_main_folder_time);
-                fDate = (TextView) v.findViewById(R.id.activity_main_folder_date);
-                fText = (TextView) v.findViewById(R.id.activity_main_folder_name);
-                fFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_folder_frame);
             }
         }
 
@@ -1100,15 +1073,20 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
 
-        //TODO I FOUND IT -- THIS IS WHERE CLIP VIEWS ON THE SCREEN ARE BEING CREATED
         @Override
         public void onBindViewHolder(final FolderCardViewHolder clipCardViewHolder, int i) {
             final FolderObject folderObject = folderObjectList.get(i);
-            clipCardViewHolder.fDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
-            clipCardViewHolder.fTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
-            clipCardViewHolder.fText.setText(MyUtil.stringLengthCut(folderObject.getName()));
+            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
+            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
+            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(folderObject.getName()));
 
-            clipCardViewHolder.vFrameLayout.setVisibility(View.GONE);
+            clipCardViewHolder.vText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent openIntent = new Intent(context, ActivityFolder.class);
+                    startActivity(openIntent);
+                }
+            });
 
             setAnimation(clipCardViewHolder.vMain, i);
         }
@@ -1118,7 +1096,7 @@ public class ActivityMain extends MyActionBarActivity {
         public FolderCardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
-                    inflate(R.layout.activity_main_card, viewGroup, false);
+                    inflate(R.layout.activity_main_foldercard, viewGroup, false);
 
             return new FolderCardViewHolder(itemView);
         }
@@ -1152,7 +1130,6 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
 
-        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen; probably dont need to change this but we will have to use it
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {
@@ -1183,32 +1160,20 @@ public class ActivityMain extends MyActionBarActivity {
             }, (position + 2) * 60);
         }
 
-
-        //TODO will likely need our own version of this that corresponds to a new XML card
         public class FolderCardViewHolder extends RecyclerView.ViewHolder {
-
+            protected TextView vTime;
+            protected TextView vDate;
+            protected TextView vText;
             protected LinearLayout vBackground;
             protected View vMain;
-            protected FrameLayout vFrameLayout;
-
-            //Folder xml ids
-            protected TextView fTime;
-            protected TextView fDate;
-            protected TextView fText;
-            protected FrameLayout fFrameLayout;
 
             public FolderCardViewHolder(View v) {
                 super(v);
-
-                vFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_clip_frame);
-
+                vTime = (TextView) v.findViewById(R.id.activity_main_foldercard_time);
+                vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
+                vText = (TextView) v.findViewById(R.id.activity_main_foldercard_text);;
                 vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
                 vMain = v;
-
-                fTime = (TextView) v.findViewById(R.id.activity_main_folder_time);
-                fDate = (TextView) v.findViewById(R.id.activity_main_folder_date);
-                fText = (TextView) v.findViewById(R.id.activity_main_folder_name);
-                fFrameLayout = (FrameLayout) v.findViewById(R.id.activity_main_folder_frame);
             }
         }
 

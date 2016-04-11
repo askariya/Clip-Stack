@@ -52,4 +52,12 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
     }
 
 
+    //TODO implement code that makes the add button work properly
+
+    public void addButtonOnClick(){
+        //TODO call modifyFolder for testing purposes
+        //TODO in actual practice: call ActivityEditor and add the clip object to the database then
+    }
+
+
 }

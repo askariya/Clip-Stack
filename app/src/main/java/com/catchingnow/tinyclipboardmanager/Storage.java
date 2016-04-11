@@ -371,6 +371,30 @@ public class Storage {
     }
 
     /***************ADDED BY US****************************/
+
+    public void modifyFolder(String oldFolder, String newFolder, ArrayList<Object> newFolderList){
+
+        //delete the old version of the folder
+        if(!oldFolder.isEmpty() && oldFolder.equals(newFolder)){
+            deleteFolderHistory(oldFolder);
+        }
+
+        //add the new folder to the database
+        if(!newFolder.isEmpty()){
+            //TODO add the new Folder to the database using Gson and stuff
+        }
+        //TODO possibly change this code so it works more like modifyClip
+    }
+
+    private boolean deleteFolderHistory(String query) {
+        int row_id = db.delete(TABLE_NAME_FOLDER, FOLDER_STRING + "=" + sqliteEscape(query), null);
+        if (row_id == -1) {
+            Log.e("Storage", "write db error: deleteFolderHistory " + query);
+            return false;
+        }
+        return true;
+    }
+
     public void addFolder(String name) {
         //Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newClip + ", " + isImportant + ")");
 
@@ -441,6 +465,8 @@ public class Storage {
         }
         return foldersInMemory;
     }
+
+
     /***********************************************************/
 
     public boolean updateSystemClipboard() {

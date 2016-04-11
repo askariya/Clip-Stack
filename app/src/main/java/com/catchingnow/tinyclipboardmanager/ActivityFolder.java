@@ -3,8 +3,12 @@ package com.catchingnow.tinyclipboardmanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jayson on 2016-03-29.
@@ -17,6 +21,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
      */
     private ImageButton addClipButton;
     private Storage database;
+    private FolderObject currentFolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,17 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         //TODO display the contents of the folder here -- probably just copy/paste setView(), and clipCardAdapter class from activity main and just change db.getClipHistory to getFolderClips or something
         //TODO in order to display only the contents in the folder, add a getFolderClips() to storage
 
+        String folderName = intent.getStringExtra("folderObjName");
+        List<FolderObject> listOfFolders = database.getFolderHistory();
+
+        //search in the database for the folder in question
+        for(int i = 0; i < listOfFolders.size(); i++){
+            if(listOfFolders.get(i).getName().equals(folderName))
+                currentFolder = listOfFolders.get(i); //store the folder in the variable 'currentFolder'
+        }
+
+        Log.v("TEST: ", currentFolder.getName()); //test that the correct folder was opened
+        //TODO at this point, may have to change the ArrayList in FolderObject to be of type ClipObject
     }
 
 

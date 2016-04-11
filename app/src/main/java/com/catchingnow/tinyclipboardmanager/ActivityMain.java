@@ -1084,6 +1084,9 @@ public class ActivityMain extends MyActionBarActivity {
                 @Override
                 public void onClick(View v) {
                     Intent openIntent = new Intent(context, ActivityFolder.class);
+                    //TODO Send this folder to the new Activity
+                    openIntent.putExtra("folderObjName", folderObject.getName());
+
                     startActivity(openIntent);
                 }
             });

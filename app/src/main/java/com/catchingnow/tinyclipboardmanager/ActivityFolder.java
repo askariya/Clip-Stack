@@ -73,7 +73,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         Toast.makeText(ActivityFolder.this,
                 "Add button has been clicked!", Toast.LENGTH_SHORT).show();
 
-        ArrayList<Object>clipArray = new ArrayList<Object>();
+        ArrayList<ClipObject>clipArray = new ArrayList<ClipObject>();
         clipArray.add(new ClipObject("eyyy", new Date()));
         clipArray.add(new ClipObject("nah", new Date()));
         clipArray.add(new ClipObject("meow", new Date()));

@@ -372,7 +372,7 @@ public class Storage {
 
     /***************ADDED BY US****************************/
 
-    public void modifyFolder(String oldFolder, String newFolder, ArrayList<Object> newFolderList){
+    public void modifyFolder(String oldFolder, String newFolder, ArrayList<ClipObject> newFolderList){
 
         open();
         //delete the old version of the folder
@@ -399,7 +399,7 @@ public class Storage {
         return true;
     }
 
-    public void addFolder(String name, ArrayList<Object> folderContents) {
+    public void addFolder(String name, ArrayList<ClipObject> folderContents) {
         //Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newClip + ", " + isImportant + ")");
 
         open();
@@ -453,8 +453,8 @@ public class Storage {
             while (c.moveToNext()) {
 
                 //Read from Gson String to ArrayList
-                Type type = new TypeToken<ArrayList<Object>>() {}.getType();
-                ArrayList<Object>  outputArrayList = folderGSON.fromJson(c.getString(2), type);
+                Type type = new TypeToken<ArrayList<ClipObject>>() {}.getType();
+                ArrayList<ClipObject>  outputArrayList = folderGSON.fromJson(c.getString(2), type);
 
                 foldersInMemory.add(
                         new FolderObject(

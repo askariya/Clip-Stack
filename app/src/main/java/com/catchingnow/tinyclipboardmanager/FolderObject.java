@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class FolderObject {
 
-    private ArrayList folderContents;
+    private ArrayList<ClipObject> folderContents;
     private String name;
     private Date creationDate;
 
@@ -19,20 +19,20 @@ public class FolderObject {
     public FolderObject(String fName, Date cDate) {
         name = fName;
         creationDate = cDate;
-        folderContents = new ArrayList();
+        folderContents = new ArrayList<ClipObject>();
     }
 
-    public FolderObject(String fName, Date cDate, ArrayList folderContents) {
+    public FolderObject(String fName, Date cDate, ArrayList<ClipObject> folderContents) {
         name = fName;
         creationDate = cDate;
         this.folderContents = folderContents;
     }
 
-    public ArrayList getFolderContents() {
+    public ArrayList<ClipObject> getFolderContents() {
         return folderContents;
     }
 
-    public void setFolderContents(ArrayList folderContents) {
+    public void setFolderContents(ArrayList<ClipObject> folderContents) {
         this.folderContents = folderContents;
     }
 
@@ -52,7 +52,7 @@ public class FolderObject {
         this.creationDate = creationDate;
     }
 
-    public void addFolderObject(FolderObject folder) { folderContents.add(FIRST_POSITION, folder); }
+//    public void addFolderObject(FolderObject folder) { folderContents.add(FIRST_POSITION, folder); }
 
     public void addClipObject(ClipObject clip) { folderContents.add(FIRST_POSITION, clip); }
 

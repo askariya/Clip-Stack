@@ -582,7 +582,7 @@ public class ActivityMain extends MyActionBarActivity {
                 if(name.isEmpty())
                     return;
 
-                db.addFolder(name, new ArrayList<Object>());
+                db.addFolder(name, new ArrayList<ClipObject>());
                 popUp.dismiss();
             }
         });

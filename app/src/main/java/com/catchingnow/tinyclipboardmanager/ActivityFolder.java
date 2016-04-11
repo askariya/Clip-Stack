@@ -73,24 +73,25 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
 
         //search in the database for the folder in question
         for(int i = 0; i < listOfFolders.size(); i++){
-            if(listOfFolders.get(i).getName().equals(folderName))
+            if(listOfFolders.get(i).getName().equals(folderName)) {
                 currentFolder = listOfFolders.get(i); //store the folder in the variable 'currentFolder'
+            }
         }
 
         initView();
         setView();
 
         /********************************************TESTING CODE**************************************/
-        Log.v("TEST: ", currentFolder.getName()); //test that the correct folder was opened
-
-        if(!currentFolder.getFolderContents().isEmpty()){
-
-
-            ClipObject cpObj = (ClipObject)currentFolder.getFolderContents().get(0);
+//        Log.v("TEST: ", currentFolder.getName()); //test that the correct folder was opened
 //
-            if(cpObj != null)
-                Log.v("TEST: ", cpObj.getText());
-        }
+//        if(!currentFolder.getFolderContents().isEmpty()){
+//
+//
+//            ClipObject cpObj = (ClipObject)currentFolder.getFolderContents().get(0);
+////
+//            if(cpObj != null)
+//                Log.v("TEST: ", cpObj.getText());
+//        }
 
         /**********************************************************************************************/
 
@@ -106,16 +107,18 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
                 "Add button has been clicked!", Toast.LENGTH_SHORT).show();
 
         Intent openEditorIntent = new Intent(context, ActivityEditor.class);
-        openEditorIntent.putExtra("FolderAddClip", "lel");
-
+        openEditorIntent.putExtra("isFolderClip", true); //boolean to signal that it is a folder clip
+        openEditorIntent.putExtra("folderName", currentFolder.getName()); //send the name of the folder
         startActivity(openEditorIntent);
-        /**************************************TESTING CODE ******************************************/
-        ArrayList<ClipObject>clipArray = new ArrayList<ClipObject>();
-        clipArray.add(new ClipObject("eyyy", new Date()));
-        clipArray.add(new ClipObject("nah", new Date()));
-        clipArray.add(new ClipObject("meow", new Date()));
 
-        database.modifyFolder(currentFolder.getName(), currentFolder.getName(), clipArray);
+
+//        /**************************************TESTING CODE ******************************************/
+//        ArrayList<ClipObject>clipArray = new ArrayList<ClipObject>();
+//        clipArray.add(new ClipObject("eyyy", new Date()));
+//        clipArray.add(new ClipObject("nah", new Date()));
+//        clipArray.add(new ClipObject("meow", new Date()));
+//
+//        database.modifyFolder(currentFolder.getName(), currentFolder.getName(), clipArray);
         /**********************************************************************************************/
     }
 

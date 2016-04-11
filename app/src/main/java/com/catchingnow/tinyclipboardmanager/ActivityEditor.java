@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +18,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 public class ActivityEditor extends MyActionBarActivity {
 
     private String oldText;
     private EditText editText;
+
+    private boolean isFolderClip;
+    private String folderName;
+
     private boolean isStarred;
     private MenuItem starItem;
     private ImageButton mFAB;
@@ -36,6 +45,8 @@ public class ActivityEditor extends MyActionBarActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         oldText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        isFolderClip = intent.getBooleanExtra("isFolderClip", false);
+        folderName = intent.getStringExtra("folderName");
         isStarred = intent.getBooleanExtra(ClipObjectActionBridge.STATUE_IS_STARRED, false);
         if (oldText == null || oldText.equals(getString(R.string.clip_notification_single_text))) {
             oldText = "";
@@ -183,8 +194,45 @@ public class ActivityEditor extends MyActionBarActivity {
         finishAndRemoveTaskWithToast(toastMessage);
     }
 
+    private void saveTextToFolder(){
+        List<FolderObject> listOfFolders = db.getFolderHistory();
+        String newText = editText.getText().toString();// the new text clip to save to the folder
+        ClipObject tempClip = new ClipObject(newText, new Date());
+        String toastMessage;
+
+        FolderObject currentFolder = null;
+
+        //search in the database for the folder in question
+        for(int i = 0; i < listOfFolders.size(); i++){
+
+            if(listOfFolders.get(i).getName().equals(folderName)){
+                currentFolder = listOfFolders.get(i); //store the folder in the variable 'currentFolder'
+            }
+
+        }
+
+        if(currentFolder != null){
+            ArrayList<ClipObject> tempList = currentFolder.getFolderContents();
+            tempList.add(tempClip);
+            db.modifyFolder(folderName, folderName, tempList); //add the text clip to the folder
+            toastMessage = getString(R.string.toast_copied, newText + "\n");
+        }
+        else{
+            toastMessage = getString(R.string.toast_deleted);
+        }
+
+        finishAndRemoveTaskWithToast(toastMessage);
+    }
+
     public void saveTextOnClick(View view) {
-        saveText();
+
+        if(isFolderClip)
+        {
+            saveTextToFolder();
+        }
+        else{
+            saveText();
+        }
     }
 
     private void finishAndRemoveTaskWithToast(String toastMessage) {

@@ -43,6 +43,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ActivityMain extends MyActionBarActivity {
     public final static String EXTRA_IS_FROM_NOTIFICATION = "com.catchingnow.tinyclipboard.EXTRA.isFromNotification";
@@ -581,7 +582,7 @@ public class ActivityMain extends MyActionBarActivity {
                 if(name.isEmpty())
                     return;
 
-                db.addFolder(name);
+                db.addFolder(name, new ArrayList<Object>());
                 popUp.dismiss();
             }
         });

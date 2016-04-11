@@ -9,7 +9,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Jayson on 2016-03-29.
@@ -49,6 +51,16 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         }
 
         Log.v("TEST: ", currentFolder.getName()); //test that the correct folder was opened
+
+        if(!currentFolder.getFolderContents().isEmpty()){
+
+            //TODO this line throws a class cast exception
+            ClipObject cpObj = (ClipObject)currentFolder.getFolderContents().get(0);
+//
+            if(cpObj != null)
+                Log.v("TEST: ", cpObj.getText());
+        }
+
         //TODO at this point, may have to change the ArrayList in FolderObject to be of type ClipObject
     }
 
@@ -60,6 +72,13 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         //TODO in actual practice: call ActivityEditor and add the clip object to the database then
         Toast.makeText(ActivityFolder.this,
                 "Add button has been clicked!", Toast.LENGTH_SHORT).show();
+
+        ArrayList<Object>clipArray = new ArrayList<Object>();
+        clipArray.add(new ClipObject("eyyy", new Date()));
+        clipArray.add(new ClipObject("nah", new Date()));
+        clipArray.add(new ClipObject("meow", new Date()));
+
+        database.modifyFolder(currentFolder.getName(), currentFolder.getName(), clipArray);
     }
 
 

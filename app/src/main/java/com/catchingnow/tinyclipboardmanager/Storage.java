@@ -374,6 +374,7 @@ public class Storage {
 
     public void modifyFolder(String oldFolder, String newFolder, ArrayList<Object> newFolderList){
 
+        open();
         //delete the old version of the folder
         if(!oldFolder.isEmpty() && oldFolder.equals(newFolder)){
             deleteFolderHistory(oldFolder);
@@ -381,12 +382,15 @@ public class Storage {
 
         //add the new folder to the database
         if(!newFolder.isEmpty()){
-            //TODO add the new Folder to the database using Gson and stuff
+            addFolder(newFolder, newFolderList);
         }
-        //TODO possibly change this code so it works more like modifyClip
+
+        close();
+        latsUpdate = new Date();//TODO possibly change this code if it doesn't work for Folders
     }
 
     private boolean deleteFolderHistory(String query) {
+        //delete the folder from the database
         int row_id = db.delete(TABLE_NAME_FOLDER, FOLDER_STRING + "=" + sqliteEscape(query), null);
         if (row_id == -1) {
             Log.e("Storage", "write db error: deleteFolderHistory " + query);
@@ -395,14 +399,15 @@ public class Storage {
         return true;
     }
 
-    public void addFolder(String name) {
+    public void addFolder(String name, ArrayList<Object> folderContents) {
         //Log.v(MyUtil.PACKAGE_NAME, "modifyClip(" + oldClip + ", " + newClip + ", " + isImportant + ")");
 
         open();
         if (!name.isEmpty()) {
             addFolderHistory(new FolderObject(
                     name,
-                    new Date()
+                    new Date(),
+                    folderContents
             ));
         }
         close();
@@ -419,7 +424,7 @@ public class Storage {
         //long timeStamp = newfolder.getDate().getTime();
 
         folderGSON = new Gson(); //create a new GSON object to hold the ArrayList of ClipObjs/FolderObjs
-        String folderContArrListString = folderGSON.toJson(newfolder.getFolderContents());;
+        String folderContArrListString = folderGSON.toJson(newfolder.getFolderContents());
 
         ContentValues values = new ContentValues();
         values.put(FOLDER_DATE, newfolder.getCreationDate().getTime());

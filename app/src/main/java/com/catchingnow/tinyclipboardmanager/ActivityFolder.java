@@ -40,7 +40,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
     private Storage database;
     private FolderObject currentFolder;
 
-    private List<ClipObject> clips;
+    private ArrayList<ClipObject> clips;
     private Date lastStorageUpdate = null;
     private boolean clickToCopy = true;
     protected boolean isStarred = false;
@@ -64,6 +64,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         context = this;
         addClipButton = (ImageButton) findViewById(R.id.main_fab);
         database = Storage.getInstance(this); //get the database
+        clips = new ArrayList<ClipObject>();
 
         //TODO in order to display only the contents in the folder, add a getFolderClips() to storage
 
@@ -128,7 +129,11 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         lastStorageUpdate = database.getLatsUpdateDate();
 
         //get clips
-        clips = currentFolder.getFolderContents();
+        //clips = currentFolder.getFolderContents();
+
+        clips.add(new ClipObject("eyyy", new Date()));
+        clips.add(new ClipObject("nah", new Date()));
+        clips.add(new ClipObject("meow", new Date()));
 
         //set view
         clipCardAdapter = new ClipCardAdapter(clips, this);
@@ -245,7 +250,6 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
             setItemsVisibility();
         }
 
-        //TODO I dont know how but this is the very final step in the adding process -- makes everything visible on screen
         private void setAnimation(final View viewToAnimate, int position) {
             //animate for list fade in
             if (!allowAnimate) {

@@ -122,9 +122,6 @@ public class ActivityMain extends MyActionBarActivity {
 
         attachKeyboardListeners();
 
-
-        //TODO This receives a broadcast from DB -- differentiate broadcast message: UPDATE_DB_ADD_CLIP vs UPDATE_DB_ADD_FOLDER
-        //setView() looks like it handles adding new clips to the screen
         mMessageReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -568,7 +565,7 @@ public class ActivityMain extends MyActionBarActivity {
     }
     /***************************************************FOLDER STUFF********************************************************/
     //TODO Added by us
-    public void folderFABOnClick(View view){
+    public void folderFABOnClick(View view) {
         /*****************Added By Brandon***********************/
         final Dialog popUp = new Dialog(this);
         popUp.setContentView(R.layout.create_folder_popup);
@@ -595,7 +592,14 @@ public class ActivityMain extends MyActionBarActivity {
         popUp.show();
     }
 
-    /*******************************************************************/
+    public void switchView(View view){
+        if(mRecList.getAdapter() == folderCardAdapter)
+            setView();
+        else if(mRecList.getAdapter() == clipCardAdapter)
+            setViewFolder();
+    }
+    /**************************************************************************************************************/
+
     private void clearDeleteQueue() {
         for (ClipObject clipObject : deleteQueue) {
             db.modifyClip(clipObject.getText(), null);
@@ -761,7 +765,7 @@ public class ActivityMain extends MyActionBarActivity {
     //TODO This gets the updated clips list from db and displays it on screen somehow using clipCardAdapter
     protected void setView() {
 
-        if (db.getLatsUpdateDate() == lastStorageUpdate) return;
+        //if (db.getLatsUpdateDate() == lastStorageUpdate) return;
         lastStorageUpdate = db.getLatsUpdateDate();
 
         //get clips
@@ -781,12 +785,14 @@ public class ActivityMain extends MyActionBarActivity {
     /*****************ADDED BY BRANDON*****************/
     protected void setViewFolder() {
 
-        if (db.getLatsUpdateDate() == lastStorageUpdate) return;
+        //if (db.getLatsUpdateDate() == lastStorageUpdate)
+            //return;
+
         lastStorageUpdate = db.getLatsUpdateDate();
+
 
        //get folders
         folders = db.getFolderHistory();
-        //clips = db.getClipHistory(queryText);
 
         //set view
         folderCardAdapter = new FolderCardAdapter(folders, this);
@@ -1077,11 +1083,11 @@ public class ActivityMain extends MyActionBarActivity {
         @Override
         public void onBindViewHolder(final FolderCardViewHolder clipCardViewHolder, int i) {
             final FolderObject folderObject = folderObjectList.get(i);
-            clipCardViewHolder.vDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
-            clipCardViewHolder.vTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
-            clipCardViewHolder.vText.setText(MyUtil.stringLengthCut(folderObject.getName()));
+            clipCardViewHolder.fDate.setText(MyUtil.getFormatDate(context, folderObject.getCreationDate()));
+            clipCardViewHolder.fTime.setText(MyUtil.getFormatTime(context, folderObject.getCreationDate()));
+            clipCardViewHolder.fText.setText(MyUtil.stringLengthCut(folderObject.getName()));
 
-            clipCardViewHolder.vText.setOnClickListener(new View.OnClickListener() {
+            clipCardViewHolder.fText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent openIntent = new Intent(context, ActivityFolder.class);
@@ -1092,7 +1098,7 @@ public class ActivityMain extends MyActionBarActivity {
                 }
             });
 
-            setAnimation(clipCardViewHolder.vMain, i);
+            setAnimation(clipCardViewHolder.fMain, i);
         }
 
 
@@ -1165,19 +1171,19 @@ public class ActivityMain extends MyActionBarActivity {
         }
 
         public class FolderCardViewHolder extends RecyclerView.ViewHolder {
-            protected TextView vTime;
-            protected TextView vDate;
-            protected TextView vText;
-            protected LinearLayout vBackground;
-            protected View vMain;
+            protected TextView fTime;
+            protected TextView fDate;
+            protected TextView fText;
+            protected LinearLayout fBackground;
+            protected View fMain;
 
             public FolderCardViewHolder(View v) {
                 super(v);
-                vTime = (TextView) v.findViewById(R.id.activity_main_foldercard_time);
-                vDate = (TextView) v.findViewById(R.id.activity_main_card_date);
-                vText = (TextView) v.findViewById(R.id.activity_main_foldercard_text);;
-                vBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
-                vMain = v;
+                fTime = (TextView) v.findViewById(R.id.activity_main_foldercard_time);
+                fDate = (TextView) v.findViewById(R.id.activity_main_card_date);
+                fText = (TextView) v.findViewById(R.id.activity_main_foldercard_text);;
+                fBackground = (LinearLayout) v.findViewById(R.id.main_background_view);
+                fMain = v;
             }
         }
 

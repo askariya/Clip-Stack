@@ -448,6 +448,7 @@ public class Storage {
             String[] COLUMNS = {FOLDER_STRING, FOLDER_DATE, FOLDER_CONTENTS};
             Cursor c;
             c = db.query(TABLE_NAME_FOLDER, COLUMNS, null, null, null, null, sortOrder);
+
             //context = db.query(TABLE_NAME, COLUMNS, CLIP_STRING + " LIKE '%" + sqliteEscape(queryString) + "%'", null, null, null, sortOrder);
             foldersInMemory = new ArrayList<>();
             while (c.moveToNext()) {
@@ -521,12 +522,8 @@ public class Storage {
 //            ActivityMain.refreshMainView(context, "");
 //        }
         CBWatcherService.startCBService(context, true, false);
-
-        /**This is whats important to us -- Sends a broadcast that the DB has changed, mMessageReceiver is a field in ActivityMain that hears the broadcast and does stuff for making the new clips visible***/
         updateDbBroadcast(context, added, deletedString);
-        /****************************************************************************************************************************************************************************************************/
 
-        //I think this is totally useless to us
         context.startService(new Intent(context, ClipObjectActionBridge.class)
          .putExtra(ClipObjectActionBridge.ACTION_CODE, ClipObjectActionBridge.ACTION_REFRESH_WIDGET)
         );

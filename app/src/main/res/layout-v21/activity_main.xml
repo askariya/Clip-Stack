@@ -69,6 +69,23 @@
             android:onClick="folderFABOnClick" />
 
         <ImageButton
+            android:id="@+id/SWITCH"
+            android:contentDescription="@string/action_switch_view"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:layout_marginRight="142dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/background_fab"
+            android:stateListAnimator="@animator/anim"
+            android:padding="8dp"
+            android:src="@drawable/change_view"
+            android:scaleType="centerInside"
+            android:elevation="4dp"
+            android:onClick="switchView" />
+
+        <ImageButton
             android:id="@+id/main_fab"
             android:transitionName="@string/action_star"
             android:contentDescription="@string/action_add"

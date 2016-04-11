@@ -65,8 +65,8 @@
             android:background="@drawable/background_fab"
             android:padding="8dp"
             android:src="@drawable/ic_action_add"
-            android:scaleType="centerInside" />
-            <!--android:onClick="mFabOnClick" />-->
+            android:scaleType="centerInside"
+            android:onClick="addButtonOnClick" />
 
     </RelativeLayout>
 

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -54,9 +55,11 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
 
     //TODO implement code that makes the add button work properly
 
-    public void addButtonOnClick(){
+    public void addButtonOnClick(View view){
         //TODO call modifyFolder for testing purposes
         //TODO in actual practice: call ActivityEditor and add the clip object to the database then
+        Toast.makeText(ActivityFolder.this,
+                "Add button has been clicked!", Toast.LENGTH_SHORT).show();
     }
 
 

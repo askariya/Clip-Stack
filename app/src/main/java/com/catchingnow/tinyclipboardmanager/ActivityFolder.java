@@ -50,6 +50,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
     private ClipCardAdapter clipCardAdapter;
     private LinearLayoutManager linearLayoutManager;
     protected Toolbar mToolbar;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         Toast.makeText(ActivityFolder.this,
                 "Folder button has been clicked!", Toast.LENGTH_SHORT).show();
 
+        context = this;
         addClipButton = (ImageButton) findViewById(R.id.main_fab);
         database = Storage.getInstance(this); //get the database
 
@@ -102,6 +104,10 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         Toast.makeText(ActivityFolder.this,
                 "Add button has been clicked!", Toast.LENGTH_SHORT).show();
 
+        Intent openEditorIntent = new Intent(context, ActivityEditor.class);
+        openEditorIntent.putExtra("FolderAddClip", "lel");
+
+        startActivity(openEditorIntent);
         /**************************************TESTING CODE ******************************************/
         ArrayList<ClipObject>clipArray = new ArrayList<ClipObject>();
         clipArray.add(new ClipObject("eyyy", new Date()));
@@ -111,6 +117,8 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         database.modifyFolder(currentFolder.getName(), currentFolder.getName(), clipArray);
         /**********************************************************************************************/
     }
+
+
 
 
     //**********ALL THE CRAP NEEDED TO MAKE THE FOLDERS SHOW THEIR CLIPS**************************/

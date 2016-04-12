@@ -132,11 +132,11 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         lastStorageUpdate = database.getLatsUpdateDate();
 
         //get clips
-        //clips = currentFolder.getFolderContents();
+        clips = currentFolder.getFolderContents();
 
-        clips.add(new ClipObject("eyyy", new Date()));
-        clips.add(new ClipObject("nah", new Date()));
-        clips.add(new ClipObject("meow", new Date()));
+//        clips.add(new ClipObject("eyyy", new Date()));
+//        clips.add(new ClipObject("nah", new Date()));
+//        clips.add(new ClipObject("meow", new Date()));
 
         //set view
         clipCardAdapter = new ClipCardAdapter(clips, this);

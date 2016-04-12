@@ -389,6 +389,12 @@ public class Storage {
         latsUpdate = new Date();//TODO possibly change this code if it doesn't work for Folders
     }
 
+    public void deleteFolder(String query) {
+        open();
+        deleteFolderHistory(query);
+        close();
+    }
+
     private boolean deleteFolderHistory(String query) {
         //delete the folder from the database
         int row_id = db.delete(TABLE_NAME_FOLDER, FOLDER_STRING + "=" + sqliteEscape(query), null);

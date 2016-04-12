@@ -73,6 +73,7 @@ public class ActivityMain extends MyActionBarActivity {
     private Storage db;
     private List<ClipObject> clips;
     private ArrayList<ClipObject> deleteQueue = new ArrayList<>();
+    private ArrayList<FolderObject> folderDeleteQueue = new ArrayList<>();
     private BroadcastReceiver mMessageReceiver;
 
     //FAB
@@ -609,6 +610,15 @@ public class ActivityMain extends MyActionBarActivity {
         deleteQueue.clear();
     }
 
+    private void clearFolderDeleteQueue() {
+        for (FolderObject folder : folderDeleteQueue) {
+            db.deleteFolder(folder.getName());
+            folderCardAdapter.remove(folder);
+        }
+        folderCardAdapter.notifyDataSetChanged();
+        folderDeleteQueue.clear();
+    }
+
     protected void setStarredIcon() {
         if (starItem == null) return;
         if (isStarred) {
@@ -655,15 +665,26 @@ public class ActivityMain extends MyActionBarActivity {
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
                             @Override
                             public boolean canSwipe(int position) {
-                                return !clips.get(position).isStarred();
+                                if(mRecList.getAdapter() == clipCardAdapter) {
+                                    return !clips.get(position).isStarred();
+                                }
+                                return true;
                             }
 
                             @Override
                             public void onDismissedBySwipe(RecyclerView recyclerView, int[] reverseSortedPositions) {
-                                for (int position : reverseSortedPositions) {
-                                    deleteQueue.add(clips.get(position));
+                                if(mRecList.getAdapter() == clipCardAdapter) {
+                                    for (int position : reverseSortedPositions) {
+                                        deleteQueue.add(clips.get(position));
+                                    }
+                                    clearDeleteQueue();
                                 }
-                                clearDeleteQueue();
+                                else {
+                                    for (int position : reverseSortedPositions) {
+                                        folderDeleteQueue.add(folders.get(position));
+                                    }
+                                    clearFolderDeleteQueue();
+                                }
                             }
 
                         });

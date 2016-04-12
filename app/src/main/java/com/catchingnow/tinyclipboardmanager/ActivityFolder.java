@@ -1,11 +1,14 @@
 package com.catchingnow.tinyclipboardmanager;
 
 import android.animation.Animator;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +55,9 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
     protected Toolbar mToolbar;
     private Context context;
 
+    private BroadcastReceiver mMessageReceiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_folder);
@@ -77,6 +83,24 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
                 currentFolder = listOfFolders.get(i); //store the folder in the variable 'currentFolder'
             }
         }
+
+        mMessageReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra(Storage.UPDATE_DB_ADD, false)) {
+                    setView();
+                }
+                else if(intent.getBooleanExtra(Storage.UPDATE_DB_ADD_FOLDER, false)){
+                   // setViewFolder();
+                }
+                else {
+                    clipCardAdapter.remove(intent.getStringExtra(Storage.UPDATE_DB_DELETE));
+                }
+
+            }
+        };
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter(Storage.UPDATE_DB));
 
         initView();
         setView();
@@ -110,7 +134,9 @@ public class ActivityFolder extends ActionBarActivity { //TODO maybe change to M
         openEditorIntent.putExtra("isFolderClip", true); //boolean to signal that it is a folder clip
         openEditorIntent.putExtra("folderName", currentFolder.getName()); //send the name of the folder
         startActivity(openEditorIntent);
+        finish(); //ends the current folder display
 
+        setView();
 
 //        /**************************************TESTING CODE ******************************************/
 //        ArrayList<ClipObject>clipArray = new ArrayList<ClipObject>();

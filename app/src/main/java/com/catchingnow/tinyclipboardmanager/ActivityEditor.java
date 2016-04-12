@@ -8,6 +8,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,6 +39,10 @@ public class ActivityEditor extends MyActionBarActivity {
     private Toolbar mToolbar;
     private InputMethodManager inputMethodManager;
     private Storage db;
+
+    private RecyclerView mRecList;
+    private LinearLayout mRecLayout;
+    private ActivityFolder.ClipCardAdapter clipCardAdapter;
 
 
     @Override
@@ -221,6 +227,7 @@ public class ActivityEditor extends MyActionBarActivity {
             toastMessage = getString(R.string.toast_deleted);
         }
 
+
         finishAndRemoveTaskWithToast(toastMessage);
     }
 
@@ -229,6 +236,10 @@ public class ActivityEditor extends MyActionBarActivity {
         if(isFolderClip)
         {
             saveTextToFolder();
+
+            Intent backToFolder = new Intent(this, ActivityFolder.class);
+            backToFolder.putExtra("folderObjName", folderName);
+            startActivity(backToFolder);
         }
         else{
             saveText();
